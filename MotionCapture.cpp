@@ -36,8 +36,12 @@ bool resetMatrices = false;
 
 double limitFPS = 0;
 
-int main()
+int main(int argc, char **argv)
 {
+    if (argc<=1 || argc>2){
+        std::cout << "BVH File input error! Exiting the program..."<<std::endl;
+        return -1;
+    }
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -52,7 +56,7 @@ int main()
 // glfw window creation
 // --------------------
 	
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "BVHParser", NULL, NULL);
 
 	if (window == NULL)
 	{
@@ -81,7 +85,10 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
-	BVHParser bvh("MotionData/Trial002.bvh");
+    char s1[50] = "MotionData/";
+    char * s2 = argv[1];
+    strcat(s1,s2);
+	BVHParser bvh(s1);
 	bvh.setHierarchy();
 	bvh.clearVISITED();
 	bvh.setBoneVAOs(bvh.root);
@@ -113,10 +120,11 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		deltaTime2 += (currentFrame - lastFrame) / limitFPS;
 		lastFrame = currentFrame;
+        
+        processInput(window);
 
 		// update settings here
 		while (deltaTime2 >= 1.0) {
-			processInput(window);
 			// render
 			// ------
 			glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
@@ -138,7 +146,6 @@ int main()
 				if (frameIndex == bvh.Frames) {
 					frameIndex = 0;
 				}
-				moveFlag == false;
 			}
 			if (resetMatrices == true) {
 				bvh.clearVISITED();
