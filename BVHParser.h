@@ -59,7 +59,6 @@ void BVHParser::setHierarchy() {
 	}
 }
 
-//지금의 node와 다음 node를 구분하는 것이 중요! 어디서부터 지금, 어느 것이 다음?
 Bone* BVHParser::settingBoneRelation(std::ifstream& fileReader) {
 	//Right now give joint data here
 	std::string temp, temp2, temp3;
@@ -173,7 +172,6 @@ void BVHParser::setFrame(Bone * root, int frameIndex) {
 	setMotion(root, frameIndex);
 }
 
-//frameIndex parameter is just for debugging. delete it afterwards.
 void BVHParser::setMotion(Bone * root, int frameIndex) {
 	int * channelOrder = root->channelOrder;
 	for (int i = 0; i < root->returnnChannel(); i++) {
